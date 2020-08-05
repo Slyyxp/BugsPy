@@ -3,17 +3,5 @@ prefs = {
 }
 
 credentials = {
-    "username": "username",
-    "password": "password",
-    "adid": "",
-    "play_mode": "TS",
-    "device_model": "android",
-    "device_id": "",
-    "user_agent": "Mobile|Bugs|4.11.30|Android|5.1.1|SM-G965N|samsung|market",
-    "cellular_bitrate": "aac",
-    "wifi_bitrate": "aac",
-    "is_radsone": "N",
-    "api_key": "",
-    "payco_token": "",
     "cookie": ""
 }

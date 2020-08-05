@@ -17,21 +17,6 @@ class Client:
         r = self.session.post("https://{}.bugs.co.kr/{}api_key={}".format(sub, epoint, self.cfg['api_key']), json=json, data=data)
         return r.json()
 
-    def auth(self):
-        data={
-            "adid": self.cfg['adid'],
-            "cellular_bitrate": self.cfg['cellular_bitrate'],
-            "device_id": self.cfg['device_id'],
-            "device_model": self.cfg['device_model'],
-            "is_radsone": "N",
-            "payco_token": self.cfg['payco_token'],
-            "play_mode": self.cfg['play_mode'],
-            "wifi_bitrate": self.cfg['wifi_bitrate']
-        }
-        r = self.make_call("secure", "mbugs/3/login/paycoToken?", data=data)
-        if r['ret_code'] != 0:
-            raise Exception("Auth failed.")
-
     def get_meta(self, type, id):
         if type == "album":
             json=[{"id":"album_info","args":{"albumId":id}}, {"id":"artist_role_info","args":{"contentsId":id,"type":"ALBUM"}}]
