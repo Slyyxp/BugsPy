@@ -1,8 +1,9 @@
 import logging
-from modules import logger
+from modules import logger, client
 
 def main():
-	logger_bugs.info("Hello world")
+	meta = client.Client().get_meta(type="album", id=990817)
+	print(meta)
 
 
 if __name__ == "__main__":
