@@ -3,5 +3,6 @@ prefs = {
 }
 
 credentials = {
-    "cookie": ""
+    "username": "",
+    "password": ""
 }
