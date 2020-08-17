@@ -1,8 +1,12 @@
 # Standard
 import requests
+import logging
+import sys
 
 # BugsPy
-from modules import config
+from modules import config, exceptions
+
+logger = logging.getLogger("Client")
 
 class Client:
     def __init__(self):
@@ -13,12 +17,26 @@ class Client:
             "Host": "api.bugs.co.kr",
         })
 
-    def authenticate(self):
-        # TODO: Add authentication for Bugs.co.kr accounts (Not Payco)
-        print("Authenticating")
+    def auth(self):
+        data = {
+            "device_id": self.cfg['device_id'],
+            "passwd": self.cfg['password'],
+            "userid": self.cfg['username']
+        }
+        r = self.make_call("secure", "mbugs/3/login?", data=data)
+        if r['ret_code'] == 300:
+            raise exceptions.AuthenticationError("Invalid Credentials")
+        else:
+            logger.info("Login Successful")
+        self.nickname = r['result']['extra_data']['nickname']
+        self.connection_info = r['result']['coninfo']
+        return self.connection_info
 
-    def make_call(self, sub, epoint, data=None, json=None):
-        r = self.session.post("https://{}.bugs.co.kr/{}api_key={}".format(sub, epoint, self.cfg['api_key']), json=json, data=data)
+    def get_con_info(self):
+        return self.connection_info
+
+    def make_call(self, sub, epoint, data=None, json=None, params=None):
+        r = self.session.post("https://{}.bugs.co.kr/{}api_key={}".format(sub, epoint, self.cfg['api_key']), json=json, data=data, params=params)
         return r.json()
 
     def get_meta(self, type, id):
