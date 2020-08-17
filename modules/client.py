@@ -13,6 +13,10 @@ class Client:
             "Host": "api.bugs.co.kr",
         })
 
+    def authenticate(self):
+        # TODO: Add authentication for Bugs.co.kr accounts (Not Payco)
+        print("Authenticating")
+
     def make_call(self, sub, epoint, data=None, json=None):
         r = self.session.post("https://{}.bugs.co.kr/{}api_key={}".format(sub, epoint, self.cfg['api_key']), json=json, data=data)
         return r.json()
