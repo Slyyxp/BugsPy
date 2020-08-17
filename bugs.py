@@ -136,7 +136,7 @@ def tag(album, track, file_path, cover_path):
 			audio = id3.ID3(file_path)
 		except ID3NoHeaderError:
 			audio = id3.ID3()
-		logging.info("Writing tags to {}".format(os.path.basename(file_path)))
+		logger_bugs.info("Writing tags to {}".format(os.path.basename(file_path)))
 		for k, v in meta.items():
 			try:
 				id3tag = legend[k]
