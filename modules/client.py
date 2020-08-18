@@ -1,7 +1,6 @@
 # Standard
 import requests
 import logging
-import sys
 
 # BugsPy
 from modules import config, exceptions
