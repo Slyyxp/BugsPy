@@ -18,7 +18,7 @@ def getargs():
 
 
 def download_track(pre_path, track_id, track_title, track_number):
-	logger_bugs.info("Downloading {}. {}".format(track_number, track_title))
+	logger_bugs.info("Track: {}. {}".format(track_number, track_title))
 	params = {
 		"ConnectionInfo": connection_info,
 		"api_key": config.credentials['api_key'],
@@ -52,6 +52,7 @@ def album_rip(album_id):
 	meta = client.get_meta(type="album", id=int(album_id))
 	album_directory_name = "{} - {}".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
 	                                        meta['list'][0]['album_info']['result']['title'])
+	logger_bugs.info("Album: {}.".format(album_directory_name))
 	if config.prefs['artist_folders']:
 		album_path = os.path.join(config.prefs['downloads_directory'],
 		                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name, )

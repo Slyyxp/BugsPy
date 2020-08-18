@@ -23,7 +23,7 @@ def exist_check(abs):
 	:return: If path exists.
 	"""
 	if os.path.isfile(abs):
-		logger_utilities.info("{} already exists locally.".format(os.path.basename(abs)))
+		logger_utilities.debug("{} already exists locally.".format(os.path.basename(abs)))
 		return True
 
 
