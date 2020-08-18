@@ -18,7 +18,10 @@ Project structure based on **[GeniePy](https://github.com/Slyyxp/GeniePy)**
 
 - Python 3.6+
 - Bugs.co.kr Subscription 
-  
+ 
+## Subscribing
+### [Wiki](https://github.com/Slyyxp/BugsPy/wiki/Foreign-Subscriptions.-(iOS))
+
 ## Installation & Setup
 
 ```console
