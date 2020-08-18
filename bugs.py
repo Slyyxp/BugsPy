@@ -39,6 +39,10 @@ def download_track(pre_path, track_id, track_title, track_number):
 					f.write(chunk)
 					bar.update(len(chunk))
 
+def artist_rip(artist_id):
+	meta = client.get_meta(type="artist", id=int(artist_id))
+	for album in meta['list'][1]['artist_album']['list']:
+		album_rip(album['album_id'])
 
 def album_rip(album_id):
 	"""
@@ -150,8 +154,11 @@ def tag(album, track, file_path, cover_path):
 
 def main():
 	for url in args.u:
-		album_id = utils.get_id(url)
-		album_rip(album_id)
+		id = utils.get_id(url)
+		if "album" in url:
+			album_rip(album_id=id)
+		elif "artist" in url:
+			artist_rip(artist_id=id)
 
 
 if __name__ == "__main__":
