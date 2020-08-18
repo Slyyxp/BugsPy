@@ -12,6 +12,7 @@ class Client:
     def __init__(self):
         self.session = requests.Session()
         self.cfg = config.credentials
+        self.api_key = "b2de0fbe3380408bace96a5d1a76f800"
         self.session.headers.update({
             "User-Agent": self.cfg['user_agent'],
             "Host": "api.bugs.co.kr",
@@ -32,11 +33,11 @@ class Client:
         self.connection_info = r['result']['coninfo']
         return self.connection_info
 
-    def get_con_info(self):
-        return self.connection_info
+    def get_api_key(self):
+        return self.api_key
 
     def make_call(self, sub, epoint, data=None, json=None, params=None):
-        r = self.session.post("https://{}.bugs.co.kr/{}api_key={}".format(sub, epoint, self.cfg['api_key']), json=json, data=data, params=params)
+        r = self.session.post("https://{}.bugs.co.kr/{}api_key={}".format(sub, epoint, self.api_key), json=json, data=data, params=params)
         return r.json()
 
     def get_meta(self, type, id):

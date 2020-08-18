@@ -21,7 +21,7 @@ def download_track(pre_path, track_id, track_title, track_number):
 	logger_bugs.info("Track: {}. {}".format(track_number, track_title))
 	params = {
 		"ConnectionInfo": connection_info,
-		"api_key": config.credentials['api_key'],
+		"api_key": api_key,
 		"overwrite_session": "Y",
 		"track_id": track_id
 	}
@@ -170,5 +170,6 @@ if __name__ == "__main__":
 	logger_bugs = logging.getLogger("Bugs")
 	client = client.Client()
 	connection_info = client.auth()
+	api_key = client.get_api_key()
 	args = getargs()
 	main()
