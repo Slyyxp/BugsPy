@@ -2,7 +2,6 @@ import argparse
 import logging
 import os
 from datetime import datetime
-import sys
 import requests
 from tqdm import tqdm
 from modules import logger, client, utils, config
