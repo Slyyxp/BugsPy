@@ -43,6 +43,8 @@ def artist_rip(artist_id):
 	meta = client.get_meta(type="artist", id=int(artist_id))
 	logger_bugs.info("Artist: {} | Album Count: {}".format(meta['list'][0]['artist_info']['result']['artist_nm'], len(meta['list'][1]['artist_album']['list'])))
 	for album in meta['list'][1]['artist_album']['list']:
+		index = meta['list'][1]['artist_album']['list'].index(album)+1
+		logger_bugs.info("Downloading Album #{} of #{}.".format(index, len(meta['list'][1]['artist_album']['list'])))
 		album_rip(album['album_id'])
 
 def album_rip(album_id):
