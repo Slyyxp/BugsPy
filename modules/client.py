@@ -46,9 +46,8 @@ class Client:
         elif type == "artist":
             json=[{"id":"artist_info","args":{"artistId":id}}, {"id":"artist_album","args":{"artistId":id, "albumType":"main","tracksYn":"Y","page":1,"size":500}}]
         else:
-            print("Invalid type provided")
-            sys.exit()
+            raise exceptions.InvalidMapType("Invalid invokeMap type.")
         r = self.make_call("api", "3/home/invokeMap?", json=json)
         if r['ret_code'] != 0:
-            raise Exception("Failed to get album metadata.")
+            raise exceptions.MapFailure("Failed to get a map.")
         return r
