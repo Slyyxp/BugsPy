@@ -12,6 +12,8 @@
 
 Tested on **[Python 3.8.0](https://www.python.org/downloads/release/python-380/)**
 
+Project structure based on **[GeniePy](https://github.com/Slyyxp/GeniePy)**
+
 ## Prerequisites
 
 - Python 3.6+
