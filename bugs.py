@@ -25,7 +25,7 @@ def download_track(pre_path, track_id, track_title, track_number):
 		"track_id": track_id
 	}
 	r = requests.get(
-		"http://api.bugs.co.kr/3/tracks/{}/listen/android/{}".format(track_id, config.prefs['audio_quality']),
+		"http://api.bugs.co.kr/3/tracks/{}/listen/android/flac".format(track_id),
 		params=params, stream=True)
 	r.raise_for_status()
 	size = int(r.headers.get('content-length', 0))
@@ -52,20 +52,21 @@ def album_rip(album_id):
 	"""
 	meta = client.get_meta(type="album", id=int(album_id))
 	album_directory_name = "{} - {}".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
-	                                        meta['list'][0]['album_info']['result']['title'])
+	                                        meta['list'][0]['album_info']['result']['title'].strip())
 	logger_bugs.info("Album: {}.".format(album_directory_name))
 	if config.prefs['artist_folders']:
 		album_path = os.path.join(config.prefs['downloads_directory'],
-		                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name, )
+		                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name)
 	else:
 		album_path = os.path.join(config.prefs['downloads_directory'], album_directory_name)
 	utils.make_dir(album_path)
 	cover_path = os.path.join(album_path, config.prefs['cover_name'])
 	download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
 	for track in meta['list'][0]['album_info']['result']['tracks']:
+		track_quality = utils.determine_quality(track=track)
 		pre_path = os.path.join(album_path, "{}. .BugsPy".format(track['track_no']))
 		post_path = os.path.join(album_path, "{}. {}.{}".format(track['track_no'], track['track_title'],
-		                                                        config.prefs['audio_quality']))
+		                                                        track_quality))
 		if utils.exist_check(post_path):
 			pass
 		else:
@@ -117,7 +118,6 @@ def tag(album, track, file_path, cover_path):
 				f_image.data = f.read()
 			f_file.add_picture(f_image)
 			f_file.save()
-		# Add tags to the flac file
 		f = FLAC(file_path)
 		logger_bugs.debug("Writing tags to {}".format(os.path.basename(file_path)))
 		for k, v in meta.items():
@@ -128,6 +128,8 @@ def tag(album, track, file_path, cover_path):
 			"ALBUM": id3.TALB,
 			"ALBUMARTIST": id3.TPE2,
 			"ARTIST": id3.TPE1,
+			"TRACKNUMBER": id3.TRCK,
+			"DISCNUMBER": id3.TPOS,
 			"COMMENT": id3.COMM,
 			"COMPOSER": id3.TCOM,
 			"COPYRIGHT": id3.TCOP,

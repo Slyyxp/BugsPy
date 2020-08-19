@@ -4,8 +4,7 @@ prefs = {
 	"artist_folders": True,
 	"cover_size": "500",
 	"cover_name": "cover.jpg",
-	"lyrics_type": "N",
-	"audio_quality": "flac"
+	"lyrics_type": "N"
 }
 
 credentials = {

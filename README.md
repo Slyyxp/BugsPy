@@ -67,7 +67,6 @@ Config  | Description  | Example
 ------------- | ------------- | -------------
 download_directory | Directory to download files to | `Z:/BugsPy/downloads`
 log_directory | Directory to save log files to  | `Z:/BugsPy/logs`
-audio_quality | Default download format (flac, mp3) | `flac`, `mp3`
 artist_folders | Whether or not to nest downloads into artist folders | `True/False`
 cover_size | Size of cover art to download + embed | `original`, `200`, `140`, `1000`, `350`, `75`, `500`
 cover_name | Name of cover art with jpg extension | `cover.jpg`, `folder.jpg`

@@ -16,6 +16,11 @@ def get_id(url):
 		r'https?://music\.bugs\.co\.kr/(?:(?:album|artist|playlist)/|[a-z]{2}-[a-z]{2}-?\w+(?:-\w+)*-?)(\w+)',
 		url).group(1)
 
+def determine_quality(track):
+	if track['svc_flac_yn'] == 'Y':
+		return 'flac'
+	else:
+		return 'mp3'
 
 def exist_check(abs):
 	"""
@@ -33,9 +38,9 @@ def organize_meta(album, track, lyrics):
 		"ALBUMARTIST": track['artist_disp_nm'],
 		"ARTIST": track['artist_disp_nm'],
 		"TITLE": track['track_title'],
-		"DISCNUMBER": track['disc_id'],
-		"TRACKNUMBER": track['track_no'],
-		"COMMENT": track['track_id'],
+		"DISCNUMBER": str(track['disc_id']),
+		"TRACKNUMBER": str(track['track_no']),
+		"COMMENT": str(track['track_id']),
 		"DATE": datetime.strptime(track['release_ymd'], '%Y%m%d').strftime('%Y.%m.%d'),
 		"GENRE": album['list'][0]['album_info']['result']['genre_str'].replace(",", "; "),
 		"LABEL": '; '.join(str(label['label_nm']) for label in album['list'][0]['album_info']['result']['labels']),
