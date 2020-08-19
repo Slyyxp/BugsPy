@@ -158,6 +158,7 @@ def tag(album, track, file_path, cover_path):
 def main():
 	for url in args.u:
 		id = utils.get_id(url)
+		logger_bugs.debug("ID: {}. URL: {}.".format(id, url))
 		if "album" in url:
 			album_rip(album_id=id)
 		elif "artist" in url:
