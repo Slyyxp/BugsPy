@@ -2,7 +2,8 @@ import os
 import re
 import logging
 from datetime import datetime
-import platform
+from platform import uname
+from sys import version
 from modules import config
 
 logger_utilities = logging.getLogger("Utilities")
@@ -34,7 +35,8 @@ def exist_check(abs):
 		return True
 
 def log_system_information():
-	logger_utilities.debug("System Information: {}".format(platform.uname()))
+	logger_utilities.debug("System Information: {}".format(uname()))
+	logger_utilities.debug("Python Version: {}".format(version))
 	logger_utilities.debug("Preferences: {}".format(config.prefs))
 
 def organize_meta(album, track, lyrics):
