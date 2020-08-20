@@ -30,6 +30,9 @@ class Client:
             logger.info("Login Successful")
         self.nickname = r['result']['extra_data']['nickname']
         self.connection_info = r['result']['coninfo']
+        # Log non-sensitive authentication information for debugging purposes.
+        logger.debug("Nickname: {}".format(self.nickname))
+        logger.debug("is_flac_premium: {}".format(r['result']['right']['stream']['is_flac_premium']))
         return self.connection_info
 
     def get_api_key(self):

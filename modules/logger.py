@@ -10,7 +10,7 @@ def log_setup():
 	folder_name = os.path.join(prefs['log_directory'], '{:%Y-%m-%d}'.format(datetime.now()))
 	make_dir(folder_name)
 	log_path = os.path.join(folder_name, filename)
-	logging.basicConfig(level=logging.INFO,
+	logging.basicConfig(level=logging.DEBUG,
 	                    handlers=[logging.FileHandler(log_path, 'w', 'utf-8')],
 	                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
 	                    datefmt='%Y-%m-%d %H:%M:%S')

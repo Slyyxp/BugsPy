@@ -170,6 +170,7 @@ def main():
 if __name__ == "__main__":
 	logger.log_setup()
 	logger_bugs = logging.getLogger("Bugs")
+	utils.log_system_information()
 	client = client.Client()
 	connection_info = client.auth()
 	api_key = client.get_api_key()
