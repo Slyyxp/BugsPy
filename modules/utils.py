@@ -8,11 +8,9 @@ from modules import config
 
 logger_utilities = logging.getLogger("Utilities")
 
-
 def make_dir(dir):
 	if not os.path.isdir(dir):
 		os.makedirs(dir)
-
 
 def get_id(url):
 	return re.match(
@@ -48,9 +46,17 @@ def organize_meta(album, track, lyrics):
 		"DISCNUMBER": str(track['disc_id']),
 		"TRACKNUMBER": str(track['track_no']),
 		"COMMENT": str(track['track_id']),
-		"DATE": datetime.strptime(track['release_ymd'], '%Y%m%d').strftime('%Y.%m.%d'),
+		"DATE": _get_date(track['release_ymd']),
 		"GENRE": album['list'][0]['album_info']['result']['genre_str'].replace(",", "; "),
 		"LABEL": '; '.join(str(label['label_nm']) for label in album['list'][0]['album_info']['result']['labels']),
 		"LYRICS": lyrics
 	}
 	return meta
+
+def _get_date(date):
+	date_patterns = ["%Y%m%d", "%Y%m", "%Y"]
+	for pattern in date_patterns:
+		try:
+			return datetime.strptime(date, pattern).strftime('%Y.%m.%d')
+		except ValueError:
+			pass
