@@ -65,8 +65,8 @@ def album_rip(album_id):
 	for track in meta['list'][0]['album_info']['result']['tracks']:
 		track_quality = utils.determine_quality(track=track)
 		pre_path = os.path.join(album_path, "{}. .BugsPy".format(track['track_no']))
-		post_path = os.path.join(album_path, "{}. {}.{}".format(track['track_no'], track['track_title'],
-		                                                        track_quality))
+		post_path = utils.sanitize(os.path.join(album_path, "{}. {}.{}".format(track['track_no'], track['track_title'],
+		                                                        track_quality)))
 		if utils.exist_check(post_path):
 			pass
 		else:
