@@ -55,10 +55,10 @@ def album_rip(album_id):
 	                                        meta['list'][0]['album_info']['result']['title'].strip())
 	logger_bugs.info("Album: {}.".format(album_directory_name))
 	if config.prefs['artist_folders']:
-		album_path = os.path.join(config.prefs['downloads_directory'],
-		                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name)
+		album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'],
+		                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name))
 	else:
-		album_path = os.path.join(config.prefs['downloads_directory'], album_directory_name)
+		album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'], album_directory_name))
 	utils.make_dir(album_path)
 	cover_path = os.path.join(album_path, config.prefs['cover_name'])
 	download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)

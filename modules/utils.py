@@ -2,7 +2,7 @@ import os
 import re
 import logging
 from datetime import datetime
-from platform import uname
+import platform
 from sys import version
 from modules import config
 
@@ -16,6 +16,18 @@ def get_id(url):
 	return re.match(
 		r'https?://music\.bugs\.co\.kr/(?:(?:album|artist|playlist)/|[a-z]{2}-[a-z]{2}-?\w+(?:-\w+)*-?)(\w+)',
 		url).group(1)
+
+def sanitize(fn):
+	"""
+	:param fn: Filename
+	:return: Sanitized string
+
+	Removes invalid characters in the filename dependant on Operating System.
+	"""
+	if _is_win():
+		return re.sub(r'[\/:*?"><|]', '_', fn)
+	else:
+		return re.sub('/', '_', fn)
 
 def determine_quality(track):
 	if track['svc_flac_yn'] == 'Y':
@@ -32,8 +44,12 @@ def exist_check(abs):
 		logger_utilities.debug("{} already exists locally.".format(os.path.basename(abs)))
 		return True
 
+def _is_win():
+	if platform.system() == 'Windows':
+		return True
+
 def log_system_information():
-	logger_utilities.debug("System Information: {}".format(uname()))
+	logger_utilities.debug("System Information: {}".format(platform.uname()))
 	logger_utilities.debug("Python Version: {}".format(version))
 	logger_utilities.debug("Preferences: {}".format(config.prefs))
 
