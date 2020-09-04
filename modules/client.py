@@ -31,7 +31,6 @@ class Client:
         self.nickname = r['result']['extra_data']['nickname']
         self.connection_info = r['result']['coninfo']
         # Log non-sensitive authentication information for debugging purposes.
-        logger.debug("Nickname: {}".format(self.nickname))
         logger.debug("Subscription Plan: {}".format(r['result']['right']['product']['name']))
         logger.debug("Stream: {}".format(r['result']['right']['stream']))
         return self.connection_info
