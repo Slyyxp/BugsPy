@@ -53,27 +53,35 @@ def album_rip(album_id):
 	meta = client.get_meta(type="album", id=int(album_id))
 	album_directory_name = "{} - {}".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
 	                                        meta['list'][0]['album_info']['result']['title'].strip())
-	logger_bugs.info("Album: {}.".format(album_directory_name))
-	if config.prefs['artist_folders']:
-		album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'],
-		                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name))
+	# Check for availability.
+	if meta['list'][0]['album_info']['result']['is_album_str_noright']:
+		logger_bugs.warning('No streaming rights for {}.'.format(album_directory_name))
 	else:
-		album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'], album_directory_name))
-	utils.make_dir(album_path)
-	cover_path = os.path.join(album_path, config.prefs['cover_name'])
-	download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
-	for track in meta['list'][0]['album_info']['result']['tracks']:
-		track_quality = utils.determine_quality(track=track)
-		pre_path = os.path.join(album_path, "{}. .BugsPy".format(track['track_no']))
-		post_path = utils.sanitize(os.path.join(album_path, "{}. {}.{}".format(track['track_no'], track['track_title'],
-		                                                        track_quality)))
-		if utils.exist_check(post_path):
-			pass
+		logger_bugs.info("Album: {}.".format(album_directory_name))
+		if config.prefs['artist_folders']:
+			album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'],
+			                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name))
 		else:
-			download_track(pre_path=pre_path, track_id=track['track_id'], track_title=track['track_title'],
-			               track_number=track['track_no'])
-			os.rename(pre_path, post_path)
-			tag(album=meta, track=track, file_path=post_path, cover_path=cover_path)
+			album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'], album_directory_name))
+		utils.make_dir(album_path)
+		cover_path = os.path.join(album_path, config.prefs['cover_name'])
+		download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
+		for track in meta['list'][0]['album_info']['result']['tracks']:
+			# Check for availability.
+			if not track['track_str_rights']:
+				logger_bugs.warning('No streaming rights for #{} - {}.'.format(track['track_no'], track['track_title']))
+			else:
+				track_quality = utils.determine_quality(track=track)
+				pre_path = os.path.join(album_path, "{}. .BugsPy".format(track['track_no']))
+				post_path = utils.sanitize(os.path.join(album_path, "{}. {}.{}".format(track['track_no'], track['track_title'],
+				                                                        track_quality)))
+				if utils.exist_check(post_path):
+					pass
+				else:
+					download_track(pre_path=pre_path, track_id=track['track_id'], track_title=track['track_title'],
+					               track_number=track['track_no'])
+					os.rename(pre_path, post_path)
+					tag(album=meta, track=track, file_path=post_path, cover_path=cover_path)
 
 
 def download_cover(imgs, cover_path):
