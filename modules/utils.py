@@ -17,6 +17,12 @@ def get_id(url):
 		r'https?://music\.bugs\.co\.kr/(?:(?:album|artist|playlist)/|[a-z]{2}-[a-z]{2}-?\w+(?:-\w+)*-?)(\w+)',
 		url).group(1)
 
+def contribution_check(artist_id_provided, artist_id_api):
+	if int(artist_id_provided) == int(artist_id_api):
+		return False
+	else:
+		return True
+
 def sanitize(fn):
 	"""
 	:param fn: Filename

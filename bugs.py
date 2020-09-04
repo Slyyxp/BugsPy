@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+from sys import exit
 from datetime import datetime
 import requests
 from tqdm import tqdm
@@ -44,7 +45,16 @@ def artist_rip(artist_id):
 	for album in meta['list'][1]['artist_album']['list']:
 		index = meta['list'][1]['artist_album']['list'].index(album)+1
 		logger_bugs.info("Downloading Album #{} of #{}.".format(index, len(meta['list'][1]['artist_album']['list'])))
-		album_rip(album['album_id'])
+		contribution_status = utils.contribution_check(artist_id, album['artist_id'])
+		if contribution_status:
+			if config.prefs['include_contributions']:
+				album_rip(album['album_id'])
+			else:
+				# Pretty sure we can exit here with no issues as all contributions are on the end of the response.
+				logger_bugs.info("Reached contributions.. Exiting.")
+				exit()
+		else:
+			album_rip(album['album_id'])
 
 def album_rip(album_id):
 	"""
@@ -153,7 +163,7 @@ def tag(album, track, file_path, cover_path):
 			audio = id3.ID3(file_path)
 		except ID3NoHeaderError:
 			audio = id3.ID3()
-		logger_bugs.info("Writing tags to {}".format(os.path.basename(file_path)))
+		logger_bugs.debug("Writing tags to {}".format(os.path.basename(file_path)))
 		for k, v in meta.items():
 			try:
 				id3tag = legend[k]
