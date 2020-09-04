@@ -61,8 +61,9 @@ def album_rip(album_id):
 	:param id: String (Album ID)
 	"""
 	meta = client.get_meta(type="album", id=int(album_id))
-	album_directory_name = "{} - {}".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
-	                                        meta['list'][0]['album_info']['result']['title'].strip())
+	album_directory_name = "{} - {} [{}]".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
+	                                        meta['list'][0]['album_info']['result']['title'].strip(),
+	                                        utils.get_date(meta['list'][0]['album_info']['result']['release_ymd']))
 	# Check for availability.
 	if meta['list'][0]['album_info']['result']['is_album_str_noright']:
 		logger_bugs.warning('No streaming rights for {}.'.format(album_directory_name))
