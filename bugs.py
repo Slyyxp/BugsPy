@@ -1,7 +1,6 @@
 import argparse
 import logging
 import os
-from sys import exit
 from datetime import datetime
 import requests
 from tqdm import tqdm
@@ -50,9 +49,7 @@ def artist_rip(artist_id):
 			if config.prefs['include_contributions']:
 				album_rip(album['album_id'])
 			else:
-				# Pretty sure we can exit here with no issues as all contributions are on the end of the response.
-				logger_bugs.info("Reached contributions.. Exiting.")
-				exit()
+				logger_bugs.info("{} has been marked as a contribution and skipped.".format(meta['list'][0]['album_info']['result']['title'].strip()))
 		else:
 			album_rip(album['album_id'])
 
