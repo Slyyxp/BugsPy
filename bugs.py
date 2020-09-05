@@ -49,7 +49,7 @@ def artist_rip(artist_id):
 			if config.prefs['include_contributions']:
 				album_rip(album['album_id'])
 			else:
-				logger_bugs.info("{} has been marked as a contribution and skipped.".format(meta['list'][0]['album_info']['result']['title'].strip()))
+				logger_bugs.info("{} - {} has been marked as a contribution and skipped.".format(album['title'].strip()))
 		else:
 			album_rip(album['album_id'])
 
