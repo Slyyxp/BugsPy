@@ -58,6 +58,11 @@ def album_rip(album_id):
 	:param id: String (Album ID)
 	"""
 	meta = client.get_meta(type="album", id=int(album_id))
+	# Check for multiple artists.
+	if meta['list'][0]['album_info']['result']['multi_artist_yn'] == "Y":
+		# Label V.A. if amount of artists > 2
+		if meta['list'][0]['album_info']['result']['artist_disp_nm'].count(",") > 2:
+			meta['list'][0]['album_info']['result']['artist_disp_nm'] = "Various Artists"
 	album_directory_name = "{} - {} [{}]".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
 	                                        meta['list'][0]['album_info']['result']['title'].strip(),
 	                                        utils.get_date(meta['list'][0]['album_info']['result']['release_ymd']))
