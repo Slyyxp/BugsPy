@@ -78,7 +78,11 @@ def album_rip(album_id):
 			album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'], album_directory_name))
 		utils.make_dir(album_path)
 		cover_path = os.path.join(album_path, config.prefs['cover_name'])
-		download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
+		try:
+			download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
+		# If we're unable to request from the url we'll set the cover_path to False
+		except requests.exceptions.HTTPError:
+			cover_path = False
 		for track in meta['list'][0]['album_info']['result']['tracks']:
 			# Check for availability.
 			if not track['track_str_rights']:
