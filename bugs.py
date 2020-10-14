@@ -93,7 +93,7 @@ def album_rip(album_id):
 				post_path = utils.sanitize(os.path.join(album_path, "{}. {}.{}".format(track['track_no'], track['track_title'],
 				                                                        track_quality)))
 				if utils.exist_check(post_path):
-					pass
+					logger_bugs.info("{} already exists.".format(post_path))
 				else:
 					download_track(pre_path=pre_path, track_id=track['track_id'], track_title=track['track_title'],
 					               track_number=track['track_no'])
