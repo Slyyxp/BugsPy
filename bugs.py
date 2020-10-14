@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 from tqdm import tqdm
 from modules import logger, client, utils, config
-from mutagen.flac import FLAC, Picture
+from mutagen.flac import FLAC, Picture, error
 import mutagen.id3 as id3
 from mutagen.id3 import ID3NoHeaderError
 
@@ -98,8 +98,15 @@ def album_rip(album_id):
 					download_track(pre_path=pre_path, track_id=track['track_id'], track_title=track['track_title'],
 					               track_number=track['track_no'])
 					os.rename(pre_path, post_path)
-					tag(album=meta, track=track, file_path=post_path, cover_path=cover_path)
-
+					try:
+						tag(album=meta, track=track, file_path=post_path, cover_path=cover_path)
+					# TODO: Come back to this exception and implement a better solution on f_file.save() within tag()
+					except error:
+						logger_bugs.warning("_writeblock error, falling back to a smaller cover artwork.")
+						config.prefs['cover_size'] = "500"
+						cover_path = os.path.join(album_path, "fallback_cover.jpg")
+						download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
+						tag(album=meta, track=track, file_path=post_path, cover_path=cover_path)
 
 def download_cover(imgs, cover_path):
 	if utils.exist_check(cover_path):
