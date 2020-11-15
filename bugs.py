@@ -63,19 +63,19 @@ def album_rip(album_id):
 		# Label V.A. if amount of artists > 2
 		if meta['list'][0]['album_info']['result']['artist_disp_nm'].count(",") > 2:
 			meta['list'][0]['album_info']['result']['artist_disp_nm'] = "Various Artists"
-	album_directory_name = "{} - {} [{}]".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
+	album_directory_name = utils.sanitize("{} - {} [{}]".format(meta['list'][0]['album_info']['result']['artist_disp_nm'],
 	                                        meta['list'][0]['album_info']['result']['title'].strip(),
-	                                        utils.get_date(meta['list'][0]['album_info']['result']['release_ymd']))
+	                                        utils.get_date(meta['list'][0]['album_info']['result']['release_ymd'])))
 	# Check for availability.
 	if meta['list'][0]['album_info']['result']['is_album_str_noright']:
 		logger_bugs.warning('No streaming rights for {}.'.format(album_directory_name))
 	else:
 		logger_bugs.info("Album: {}.".format(album_directory_name))
 		if config.prefs['artist_folders']:
-			album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'],
-			                          meta['list'][0]['album_info']['result']['artist_disp_nm'], album_directory_name))
+			album_path = os.path.join(config.prefs['downloads_directory'],
+			                          utils.sanitize(meta['list'][0]['album_info']['result']['artist_disp_nm']), album_directory_name)
 		else:
-			album_path = utils.sanitize(os.path.join(config.prefs['downloads_directory'], album_directory_name))
+			album_path = os.path.join(config.prefs['downloads_directory'], album_directory_name)
 		utils.make_dir(album_path)
 		cover_path = os.path.join(album_path, config.prefs['cover_name'])
 		try:
@@ -90,7 +90,7 @@ def album_rip(album_id):
 			else:
 				track_quality = utils.determine_quality(track=track)
 				pre_path = os.path.join(album_path, "{}. .BugsPy".format(track['track_no']))
-				post_path = utils.sanitize(os.path.join(album_path, "{}. {}.{}".format(track['track_no'], track['track_title'],
+				post_path = os.path.join(album_path, utils.sanitize("{}. {}.{}".format(track['track_no'], track['track_title'],
 				                                                        track_quality)))
 				if utils.exist_check(post_path):
 					logger_bugs.info("{} already exists.".format(post_path))
