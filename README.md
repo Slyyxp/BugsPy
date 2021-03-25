@@ -48,7 +48,8 @@ python bugs.py -u {album_url}
 ```
 Command  | Description  | Example
 ------------- | ------------- | -------------
--u | Bugs Url (Required) | `https://music.bugs.co.kr/album/20343816`, `https://music.bugs.co.kr/artist/80327433`
+-u | Bugs Url | `https://music.bugs.co.kr/album/20343816`, `https://music.bugs.co.kr/artist/80327433`
+-t | Text File Batch Using File Location | `C:/NotPorn/batch.txt`
 
 ## config.py
 
