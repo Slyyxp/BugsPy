@@ -14,7 +14,7 @@ def make_dir(dir):
 
 def get_id(url):
 	return re.match(
-		r'https?://music\.bugs\.co\.kr/(?:(?:album|artist|playlist)/|[a-z]{2}-[a-z]{2}-?\w+(?:-\w+)*-?)(\w+)',
+		r'https?://music\.bugs\.co\.kr/(?:(?:album|artist|track|playlist)/|[a-z]{2}-[a-z]{2}-?\w+(?:-\w+)*-?)(\w+)',
 		url).group(1)
 
 def contribution_check(artist_id_provided, artist_id_api):

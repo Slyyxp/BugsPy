@@ -40,6 +40,41 @@ def download_track(pre_path, track_id, track_title, track_number):
                     bar.update(len(chunk))
 
 
+def track_rip(track_id):
+    meta = client.get_meta(type="track", id=int(track_id))
+    track = meta['list'][0]['track_detail']['result']['track']
+    logger_bugs.info("Artist: {} | Track: {}".format(track['artist_nm'],
+                                                     track['track_title']))
+    track_quality = utils.determine_quality(track=track)
+    album_path = os.path.join(config.prefs['downloads_directory'])
+    pre_path = os.path.join(album_path, "{}. .BugsPy".format(track['track_no']))
+    post_path = os.path.join(album_path,utils.sanitize("{}. {}.{}".format(track['track_no'], track['track_title'],
+                                                                          track_quality)))
+    if utils.exist_check(post_path):
+        logger_bugs.info("{} already exists.".format(post_path))
+    else:
+        download_track(pre_path=pre_path, track_id=track['track_id'], track_title=track['track_title'],
+                       track_number=track['track_no'])
+        os.rename(pre_path, post_path)
+        # Fetch the album meta of the track, this is required for proper tagging.
+        meta = client.get_meta(type="album", id=int(track['album_id']))
+        # Download album artwork
+        cover_path = os.path.join(album_path, config.prefs['cover_name'])
+        try:
+            download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
+        # If we're unable to request from the url we'll set the cover_path to False
+        except requests.exceptions.HTTPError:
+            cover_path = False
+        try:
+            tag(album=meta, track=track, file_path=post_path, cover_path=cover_path)
+        # TODO: Come back to this exception and implement a better solution on f_file.save() within tag()
+        except error:
+            logger_bugs.warning("_writeblock error, falling back to a smaller cover artwork.")
+            config.prefs['cover_size'] = "500"
+            cover_path = os.path.join(album_path, "fallback_cover.jpg")
+            download_cover(meta['list'][0]['album_info']['result']['img_urls'], cover_path)
+            tag(album=meta, track=track, file_path=post_path, cover_path=cover_path)
+
 def artist_rip(artist_id):
     meta = client.get_meta(type="artist", id=int(artist_id))
     logger_bugs.info("Artist: {} | Album Count: {}".format(meta['list'][0]['artist_info']['result']['artist_nm'],
@@ -208,6 +243,8 @@ def main():
                 album_rip(album_id=id)
             elif "artist" in url:
                 artist_rip(artist_id=id)
+            elif "track" in url:
+                track_rip(track_id=id)
     if args.t:
         with open(args.t) as tf:
             # Get each line from the text file and strip /n

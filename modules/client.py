@@ -47,6 +47,8 @@ class Client:
             json=[{"id":"album_info","args":{"albumId":id}}, {"id":"artist_role_info","args":{"contentsId":id,"type":"ALBUM"}}]
         elif type == "artist":
             json=[{"id":"artist_info","args":{"artistId":id}}, {"id":"artist_album","args":{"artistId":id, "albumType":"main","tracksYn":"Y","page":1,"size":500}}]
+        elif type == "track":
+            json=[{"id":"track_detail", "args":{"trackId":id}}]
         else:
             raise exceptions.InvalidMapType("Invalid invokeMap type.")
         r = self.make_call("api", "3/home/invokeMap?", json=json)
