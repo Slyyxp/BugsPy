@@ -76,6 +76,10 @@ def organize_meta(album, track, lyrics):
 	return meta
 
 def get_date(date):
+	# Bugs sometimes does not include the day on the release date for older albums released on the first day of the month.
+	# We will append it manuallly before date transformation.
+	if len(date) == 6:
+		date = date + "01"
 	date_patterns = ["%Y%m%d", "%Y%m", "%Y"]
 	for pattern in date_patterns:
 		try:
