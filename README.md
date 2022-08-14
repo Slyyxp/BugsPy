@@ -7,6 +7,9 @@
   <img src="https://img.shields.io/maintenance/yes/2020?style=for-the-badge">  
 </p>  
 
+# DEPRECATED
+See: https://github.com/Slyyxp/rsack
+
 ## Overview
 **BugsPy** is a tool for downloading streamable tracks from **[Bugs.co.kr](https://music.bugs.co.kr/)**
 
